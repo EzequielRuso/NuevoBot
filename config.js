@@ -134,7 +134,7 @@ global.ftextjpg = fs.readFileSync('./storage/image/ftextjpg.jpg')
 
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
 //• ↳ ◜𝑳𝑰𝑵𝑲𝑺◞ • 🌿
-global.linkgc = 'https://chat.whatsapp.com/D2kkLywqKa0G3IfIm7eNf2'
+global.linkgc = 'https://chat.whatsapp.com/GJJRe58x8Vg8gnfO4FMFg5'
 global.nycuser = 'https://github.com/ALBERTO9883'
 global.script = 'https://github.com/ALBERTO9883/NyanCatBot-MD'
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
