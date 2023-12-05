@@ -18,7 +18,7 @@ say("NyanCatBot - MD", {
     align: "center",
     colors: ["#ff8000"],
   });
-  say(`WHATSAPP BOT BY ALBERTO\n-\nChatWhiskers`, {
+  say(`WHATSAPP BOT BY EZEQUIEL\n-\nSOPI`, {
     font: "console",
     align: "center",
     colors: ["red"],
