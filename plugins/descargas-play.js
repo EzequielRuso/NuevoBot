@@ -1,110 +1,133 @@
-import fetch from 'node-fetch';
-import axios from 'axios';
-import {youtubedl, youtubedlv2} from '@bochilteam/scraper';
-import fs from "fs";
-import yts from 'yt-search';
-let limit1 = 100;
-let limit2 = 400;
-let limit_a1 = 50;
-let limit_a2 = 400;
-const handler = async (m, {conn, command, args, text, usedPrefix}) => {
-  if (!text) throw `_*< DESCARGAS - PLAY />*_\n\n*[ ℹ️ ] Hace falta el título o enlace del video de YouTube.*\n\n*[ 💡 ] Ejemplo:* _${usedPrefix + command} Good Feeling - Flo Rida_`;
-    const yt_play = await search(args.join(' '));
-    let additionalText = '';
-    if (command === 'play') {
-      additionalText = 'audio';
-    } else if (command === 'play2') {
-      additionalText = 'vídeo';
+import yts from 'yt-search'
+import fetch from 'node-fetch' 
+import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
+let limit = 100
+let handler = async (m, { conn, text, args, usedPrefix, command }) => {
+  if (!text) return conn.reply(m.chat, `*🚩 Ingresa el titulo de un video o musica de YouTube.*`, m, adReply)
+  await m.react('🕓')
+  try {
+    let ytse = await yts(args.join(" "))
+    let vid = ytse.all.find(v => v.type === "video")
+    let q = '128kbps'
+    let v = vid.url
+    let yt = await youtubedl(v).catch(async _ => await youtubedlv2(v))
+    let dl_url = await yt.audio[q].download()
+    let ttl = await yt.title
+    let size = await yt.audio[q].fileSizeH
+    let ytmsg = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(false ? { remoteJid: "17608914335-1625305606@g.us" } : {}) }, message: { "extendedTextMessage": { "text":'Downloader YT', "title": 'Miku Bot - MD', 'jpegThumbnail': ytlogo}}}
+    let { title, description, thumbnail, videoId, timestamp, views, ago, url } = vid
+    if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, adReply).then(_ => m.react('✖️'))
+    let txt = `*🎶 M U S I C A - P L A Y 🎶*\n\n`
+        txt += `📝 *TITULO* ${vid.title}\n\n`
+        txt += `🕜 *DURACIÓN* ${vid.timestamp}\n\n`
+        txt += `👁 *VISITAS* ${vid.views}\n\n`
+        txt += `📅 *PUBLICADO* ${eYear(ago) || ago || '×'}\n\n`
+        txt += `⚖️ *TAMAÑO* : ${size}\n\n`
+        txt += `🎞️ *CALIDAD* : ${q}\n\n`
+        txt += `*01:06 ━━━━⬤─────── 04:05*\n\n*DESCARGANDO AUDIO POR FAVOR ESPERA @${m.sender.split`@`[0]} SOY ALGO LENTA..🐢*`
+       
+let buttonMessage= {
+'document': { url: `https://github.com/` },
+'mimetype': `application/pdf`,
+'fileName': `✯ | YᴏᴜTᴜʙᴇ Pʟᴀʏ 📥`,
+'fileLength': 99999999999999,
+'pageCount': 200,
+'contextInfo': {
+'mentionedJid': [m.sender],
+'forwardingScore': 200,
+'isForwarded': true,
+'externalAdReply': {
+'mediaUrl': `${vid.url}`,
+'mediaType': 2,
+'previewType': 'VIDEO',
+'title': `${vid.title}`,
+'body': null,
+'thumbnail': await (await fetch(vid.thumbnail)).buffer(),
+'sourceUrl': 'https://youtube.com/' }},
+'caption': txt,
+'footer': '\nVideos de YouTube',
+'headerType': 6 }
+conn.sendMessage(m.chat, buttonMessage, { quoted: ytmsg })
+
+await conn.sendMessage(m.chat, { audio: { url: dl_url }, mimetype: "audio/mp4", fileName: title + '.mp3', quoted: m, contextInfo: {
+'forwardingScore': 200,
+'isForwarded': true,
+externalAdReply:{
+showAdAttribution: false,
+title: `${title}`,
+body: `${vid.author.name}`,
+mediaType: 2, 
+sourceUrl: `${url}`,
+thumbnail: await (await fetch(thumbnail)).buffer()}}}, { quoted: m })
+await m.react('✅')
+}catch(e){
+conn.reply(m.chat, `*☓ Ocurrió un error inesperado*`, m, adReply).then(_ => m.react('✖️'))
+console.log(e)}
+}
+handler.help = ["play"].map(v => v + " <búsqueda>")
+handler.tags = ["downloader"]
+handler.command = /^play$/i
+handler.register = true 
+handler.star = 2
+export default handler
+
+function sNum(num) {
+    return new Intl.NumberFormat('en-GB', { notation: "compact", compactDisplay: "short" }).format(num)
+}
+
+function eYear(txt) {
+    if (!txt) {
+        return '×'
     }
-    const texto1 = `_*< DESCARGAS - PLAY />*_\n\n▢ *Título:* ${yt_play[0].title}\n\n▢ *Publicado:* ${yt_play[0].ago}\n\n▢ *Duración:* ${secondString(yt_play[0].duration.seconds)}\n\n▢ *Vistas:* ${`${MilesNumber(yt_play[0].views)}`}\n\n▢ *Autor:* ${yt_play[0].author.name}\n\n▢ *ID:* ${yt_play[0].videoId}\n\n▢ *Tipo:* ${yt_play[0].type}\n\n▢ *Enlace:* ${yt_play[0].url}\n\n▢ *Canal:* ${yt_play[0].author.url}\n\n*[ ℹ️ ] Se está enviando el ${additionalText}. espere...*`.trim();
-    conn.sendMessage(m.chat, {image: {url: yt_play[0].thumbnail}, caption: texto1}, {quoted: m});
-    if (command == 'play') {
-    try {   
-    const audio = global.API('ApiEmpire', `/api/v1/ytmp3?url=${yt_play[0].url}`)
-    const ttl = await yt_play[0].title
-    const buff_aud = await getBuffer(audio);
-    const fileSizeInBytes = buff_aud.byteLength;
-    const fileSizeInKB = fileSizeInBytes / 1024;
-    const fileSizeInMB = fileSizeInKB / 1024;
-    const size = fileSizeInMB.toFixed(2);       
-    if (size >= limit_a2) {  
-    await conn.sendMessage(m.chat, {text: `*[ ✔ ] Descargue su audio en ${audio}*`}, {quoted: m});
-    return;    
-    }     
-    if (size >= limit_a1 && size <= limit_a2) {  
-    await conn.sendMessage(m.chat, {document: buff_aud, mimetype: 'audio/mpeg', fileName: ttl + `.mp3`}, {quoted: m});   
-    return;
-    } else {
-    await conn.sendMessage(m.chat, {audio: buff_aud, mimetype: 'audio/mpeg', fileName: ttl + `.mp3`}, {quoted: m});   
-    return;    
-    }} catch {
-    throw '_*< DESCARGAS - PLAY />*_\n\n*[ ℹ️ ] Ocurrió un error. Por favor, inténtalo de nuevo más tarde.*';    
-    }}
-    if (command == 'play2') {
-    try {   
-    const video = global.API('ApiEmpire', `/api/v1/ytmp4?url=${yt_play[0].url}`)
-    const ttl2 = await yt_play[0].title
-    const buff_vid = await getBuffer(video);
-    const fileSizeInBytes2 = buff_vid.byteLength;
-    const fileSizeInKB2 = fileSizeInBytes2 / 1024;
-    const fileSizeInMB2 = fileSizeInKB2 / 1024;
-    const size2 = fileSizeInMB2.toFixed(2);       
-    if (size2 >= limit2) {  
-    await conn.sendMessage(m.chat, {text: `_*< DESCARGAS - PLAY />*_\n\n*[ ✔ ] Descargue su vídeo en ${video}*`}, {quoted: m});
-    return;    
-    }     
-    if (size2 >= limit1 && size2 <= limit2) {  
-    await conn.sendMessage(m.chat, {document: buff_vid, mimetype: 'video/mp4', fileName: ttl2 + `.mp4`}, {quoted: m});   
-    return;
-    } else {
-    await conn.sendMessage(m.chat, {video: buff_vid, mimetype: 'video/mp4', fileName: ttl2 + `.mp4`}, {quoted: m});   
-    return;    
-    }} catch {
-    throw '_*< DESCARGAS - PLAY />*_\n\n*[ ℹ️ ] Ocurrió un error. Por favor, inténtalo de nuevo más tarde.*';    
+    if (txt.includes('month ago')) {
+        var T = txt.replace("month ago", "").trim()
+        var L = 'hace '  + T + ' mes'
+        return L
     }
-  }
-};
-handler.command = /^(play|play2)$/i;
-export default handler;
-
-async function search(query, options = {}) {
-  const search = await yts.search({query, hl: 'es', gl: 'ES', ...options});
-  return search.videos;
+    if (txt.includes('months ago')) {
+        var T = txt.replace("months ago", "").trim()
+        var L = 'hace ' + T + ' meses'
+        return L
+    }
+    if (txt.includes('year ago')) {
+        var T = txt.replace("year ago", "").trim()
+        var L = 'hace ' + T + ' año'
+        return L
+    }
+    if (txt.includes('years ago')) {
+        var T = txt.replace("years ago", "").trim()
+        var L = 'hace ' + T + ' años'
+        return L
+    }
+    if (txt.includes('hour ago')) {
+        var T = txt.replace("hour ago", "").trim()
+        var L = 'hace ' + T + ' hora'
+        return L
+    }
+    if (txt.includes('hours ago')) {
+        var T = txt.replace("hours ago", "").trim()
+        var L = 'hace ' + T + ' horas'
+        return L
+    }
+    if (txt.includes('minute ago')) {
+        var T = txt.replace("minute ago", "").trim()
+        var L = 'hace ' + T + ' minuto'
+        return L
+    }
+    if (txt.includes('minutes ago')) {
+        var T = txt.replace("minutes ago", "").trim()
+        var L = 'hace ' + T + ' minutos'
+        return L
+    }
+    if (txt.includes('day ago')) {
+        var T = txt.replace("day ago", "").trim()
+        var L = 'hace ' + T + ' dia'
+        return L
+    }
+    if (txt.includes('days ago')) {
+        var T = txt.replace("days ago", "").trim()
+        var L = 'hace ' + T + ' dias'
+        return L
+    }
+    return txt
 }
-
-function MilesNumber(number) {
-  const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-  const rep = '$1.';
-  const arr = number.toString().split('.');
-  arr[0] = arr[0].replace(exp, rep);
-  return arr[1] ? arr.join('.') : arr[0];
-}
-
-function secondString(seconds) {
-  seconds = Number(seconds);
-  const d = Math.floor(seconds / (3600 * 24));
-  const h = Math.floor((seconds % (3600 * 24)) / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  const dDisplay = d > 0 ? d + (d == 1 ? 'd ' : 'd ') : '';
-  const hDisplay = h > 0 ? h + (h == 1 ? 'h ' : 'h ') : '';
-  const mDisplay = m > 0 ? m + (m == 1 ? 'm ' : 'm ') : '';
-  const sDisplay = s > 0 ? s + (s == 1 ? 's' : 's') : '';
-  return dDisplay + hDisplay + mDisplay + sDisplay;
-}
-
-function bytesToSize(bytes) {
-  return new Promise((resolve, reject) => {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return 'n/a';
-    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-    if (i === 0) resolve(`${bytes} ${sizes[i]}`);
-    resolve(`${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`);
-  });
-}
-
-const getBuffer = async (url, options) => {
-    options ? options : {};
-    const res = await axios({method: 'get', url, headers: {'DNT': 1, 'Upgrade-Insecure-Request': 1,}, ...options, responseType: 'arraybuffer'});
-    return res.data;
-};
