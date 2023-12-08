@@ -5,11 +5,11 @@ import fs from 'fs'
  
 //• ↳ᏢϴΝ ᏞϴՏ ΝႮ́ᎷᎬᎡϴՏ ϘႮᎬ ϘႮᏆᎬᎡᎪՏ
 global.owner = [
-  ['51907183648', '۪〬.࠭⤿ 👑 ⋅ Ezequiel', true],
+  ['51907913096', '۪〬.࠭⤿ 👑 ⋅ Daniel', true],
   ['51977835959', '۪〬.࠭⤿ 👤 ⋅ Sopi', true],
   ['51907183648', '۪〬.࠭⤿ 👤 ⋅ SinNombre', true],
   ['51907183648', '۪〬.࠭⤿ 👤 ⋅ SoporteOfc', true],
-  ['51907183648', '۪〬.࠭⤿ 👤 ⋅ SoporteOfc2', true]
+  ['51907913096', '۪〬.࠭⤿ 👤 ⋅ SoporteOfc2', true]
 ]
 global.mods = [] 
 global.prems = [] 
@@ -83,10 +83,10 @@ global.tiempo = d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', 
 
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
 //• ↳ ◜𝑴𝑨𝑹𝑪𝑨𝑺 𝑫𝑬 𝑨𝑮𝑼𝑨◞ • 🍁
-global.ignyc = '\n🐱◌*̥₊ NʏᴀɴCᴀᴛBᴏᴛ ◌❐🎋༉\n❁ཻུ۪۪ ⎧ Ezequiel\n' 
-global.wm = '\n🐱◌*̥₊ NʏᴀɴCᴀᴛBᴏᴛ ◌❐🎋༉\n❁ཻུ۪۪ ⎧ ୧ㅤ Ezequielㅤ🎋⋅ ..⃗.\n' 
+global.ignyc = '\n🐱◌*̥₊ NʏᴀɴCᴀᴛBᴏᴛ ◌❐🎋༉\n❁ཻུ۪۪ ⎧ Daniel\n' 
+global.wm = '\n🐱◌*̥₊ NʏᴀɴCᴀᴛBᴏᴛ ◌❐🎋༉\n❁ཻུ۪۪ ⎧ ୧ㅤ Danielㅤ🎋⋅ ..⃗.\n' 
 global.botname = '🐱◌*̥₊ NʏᴀɴCᴀᴛBᴏᴛ ◌❐🎋༉'
-global.me = '❁ཻུ۪۪ ⎧ ୧ㅤ Ezequielㅤ🎋⋅ ..⃗.'
+global.me = '❁ཻུ۪۪ ⎧ ୧ㅤ Danielㅤ🎋⋅ ..⃗.'
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
 
 
