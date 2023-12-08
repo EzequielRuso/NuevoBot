@@ -103,7 +103,7 @@ global.adnsfw = `🔞| Nsғᴡ Bʏ NʏᴀɴCᴀᴛBᴏᴛ⭐`
  
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰ 
 //• ↳ ◜𝑺𝑻𝑰𝑪𝑲𝑬𝑹𝑺◞ • 🍃
-global.packname = `handler.exe = {\n  message: {\n    creator: "Alberto Acosta",\n    botname: "NyanCatBot",\n    fecha: "${fecha}"\n         }\n     };`
+global.packname = `handler.exe = {\n  message: {\n    creator: "Daniel",\n    botname: "DokiBot",\n    fecha: "${fecha}"\n         }\n     };`
 global.author = `E\nE\nQ\nU\nI\nE\nL\n\n🐢`
 //╰────────────────────╯	
 	
