@@ -134,9 +134,9 @@ global.ftextjpg = fs.readFileSync('./storage/image/ftextjpg.jpg')
 
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
 //• ↳ ◜𝑳𝑰𝑵𝑲𝑺◞ • 🌿
-global.linkgc = 'https://chat.whatsapp.com/GJJRe58x8Vg8gnfO4FMFg5'
-global.nycuser = 'https://chat.whatsapp.com/GJJRe58x8Vg8gnfO4FMFg5'
-global.script = 'https://chat.whatsapp.com/GJJRe58x8Vg8gnfO4FMFg5'
+global.linkgc = 'https://chat.whatsapp.com/FZ5NqcnUDsN6ZA8kBFnewH'
+global.nycuser = 'https://chat.whatsapp.com/FZ5NqcnUDsN6ZA8kBFnewH'
+global.script = 'https://chat.whatsapp.com/FZ5NqcnUDsN6ZA8kBFnewH'
 //▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
 
 
